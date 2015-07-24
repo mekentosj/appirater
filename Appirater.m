@@ -312,9 +312,9 @@ static BOOL _alwaysUseMainBundle = NO;
     }
 }
 
-- (void)showRatingAlert
+- (void)showRatingAlertOfType:(AppiraterAlertType)alertType
 {
-  [self showRatingAlert:true];
+    [self showRatingAlertOfType:alertType withRateLaterButton:YES];
 }
 
 // is this an ok time to show the alert? (regardless of whether the rating conditions have been met)
@@ -485,7 +485,7 @@ static BOOL _alwaysUseMainBundle = NO;
 	{
         dispatch_async(dispatch_get_main_queue(),
                        ^{
-                           [self showRatingAlert];
+                           [self showRatingAlertOfType:AppiraterAlertTypeCustom];
                        });
 	}
 }
@@ -499,7 +499,7 @@ static BOOL _alwaysUseMainBundle = NO;
 	{
         dispatch_async(dispatch_get_main_queue(),
                        ^{
-                           [self showRatingAlert];
+                           [self showRatingAlertOfType:AppiraterAlertTypeCustom];
                        });
 	}
 }
@@ -574,7 +574,7 @@ static BOOL _alwaysUseMainBundle = NO;
 - (void)showPromptWithChecks:(BOOL)withChecks
       displayRateLaterButton:(BOOL)displayRateLaterButton {
   if (withChecks == NO || [self ratingAlertIsAppropriate]) {
-    [self showRatingAlert:displayRateLaterButton];
+    [self showRatingAlertOfType:AppiraterAlertTypeDefault withRateLaterButton:displayRateLaterButton];
   }
 }
 
