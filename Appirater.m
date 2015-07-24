@@ -673,41 +673,66 @@ static BOOL _alwaysUseMainBundle = NO;
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    id <AppiraterDelegate> delegate = _delegate;
-	
-	switch (buttonIndex) {
+    switch (buttonIndex) {
 		case 0:
 		{
 			// they don't want to rate it
-			[userDefaults setBool:YES forKey:kAppiraterDeclinedToRate];
-			[userDefaults synchronize];
-			if(delegate && [delegate respondsToSelector:@selector(appiraterDidDeclineToRate:)]){
-				[delegate appiraterDidDeclineToRate:self];
-			}
+            [Appirater userDeclinesToRate];
 			break;
 		}
 		case 1:
 		{
 			// they want to rate it
-			[Appirater rateApp];
-			if(delegate&& [delegate respondsToSelector:@selector(appiraterDidOptToRate:)]){
-				[delegate appiraterDidOptToRate:self];
-			}
+            [Appirater userWantsToRate];
 			break;
 		}
 		case 2:
 			// remind them later
-			[userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppiraterReminderRequestDate];
-			[userDefaults synchronize];
-			if(delegate && [delegate respondsToSelector:@selector(appiraterDidOptToRemindLater:)]){
-				[delegate appiraterDidOptToRemindLater:self];
-			}
+            [Appirater userOptsToRemindLater];
 			break;
 		default:
 			break;
 	}
+}
+
+//The user doesn't want to rate the current version of the app
++ (void)userDeclinesToRate
+{
+    id <AppiraterDelegate> delegate = _delegate;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setBool:YES forKey:kAppiraterDeclinedToRate];
+    [userDefaults synchronize];
+    if (delegate && [delegate respondsToSelector:@selector(appiraterDidDeclineToRate:)])
+    {
+        [delegate appiraterDidDeclineToRate:[Appirater sharedInstance]];
+    }
+}
+
+//The user wants to rate the current version of the app
++ (void)userWantsToRate
+{
+    id <AppiraterDelegate> delegate = _delegate;
+    
+    [Appirater rateApp];
+    if (delegate && [delegate respondsToSelector:@selector(appiraterDidOptToRate:)])
+    {
+        [delegate appiraterDidOptToRate:[Appirater sharedInstance]];
+    }
+}
+
+//The user wants the rating reminder to be shown again later
++ (void)userOptsToRemindLater
+{
+    id <AppiraterDelegate> delegate = _delegate;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppiraterReminderRequestDate];
+    [userDefaults synchronize];
+    if (delegate && [delegate respondsToSelector:@selector(appiraterDidOptToRemindLater:)])
+    {
+        [delegate appiraterDidOptToRemindLater:[Appirater sharedInstance]];
+    }
 }
 
 //Delegate call from the StoreKit view.
