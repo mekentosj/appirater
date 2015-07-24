@@ -50,6 +50,16 @@ NSString *const kAppiraterRatedCurrentVersion		= @"kAppiraterRatedCurrentVersion
 NSString *const kAppiraterDeclinedToRate			= @"kAppiraterDeclinedToRate";
 NSString *const kAppiraterReminderRequestDate		= @"kAppiraterReminderRequestDate";
 
+/**	The alert type that should be displayed by Appirater.	*/
+typedef NS_ENUM(NSUInteger, AppiraterAlertType)
+{
+    /**	Default alert type (UIAlertView prompt).	*/
+    AppiraterAlertTypeDefault = 0,
+    /**	Custom alert type (The user is responsible for presenting an alert prompt in response to the
+     appiraterDidDisplayAlert: delegate callback method).	*/
+    AppiraterAlertTypeCustom
+};
+
 NSString *templateReviewURL = @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=APP_ID";
 NSString *templateReviewURLiOS7 = @"itms-apps://itunes.apple.com/app/idAPP_ID";
 NSString *templateReviewURLiOS8 = @"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=APP_ID&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software";
@@ -80,8 +90,8 @@ static BOOL _alwaysUseMainBundle = NO;
 + (Appirater*)sharedInstance;
 - (void)showPromptWithChecks:(BOOL)withChecks
       displayRateLaterButton:(BOOL)displayRateLaterButton;
-- (void)showRatingAlert:(BOOL)displayRateLaterButton;
-- (void)showRatingAlert;
+- (void)showRatingAlertOfType:(AppiraterAlertType)alertType withRateLaterButton:(BOOL)displayRateLaterButton;
+- (void)showRatingAlertOfType:(AppiraterAlertType)alertType;
 - (BOOL)ratingAlertIsAppropriate;
 - (BOOL)ratingConditionsHaveBeenMet;
 - (void)incrementUseCount;
