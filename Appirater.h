@@ -178,6 +178,22 @@ extern NSString *const kAppiraterReminderRequestDate;
 + (void)rateApp;
 
 /*!
+ Tells Appirater that the user declines to rate the current version of the app.
+ */
++ (void)userDeclinesToRate;
+
+/*!
+ Tells Appirater that the user wants to rate the current version of the app.
+ */
++ (void)userWantsToRate;
+
+/*!
+ Tells Appirater that the user opts to be reminded about rating the current version of
+ the app at a later date (specified when calling setTimeBeforeReminding:).
+ */
++ (void)userOptsToRemindLater;
+
+/*!
  Tells Appirater to immediately close any open rating modals (e.g. StoreKit rating VCs).
 */
 + (void)closeModal;
