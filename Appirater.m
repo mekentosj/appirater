@@ -278,24 +278,33 @@ static BOOL _alwaysUseMainBundle = NO;
 	return appirater;
 }
 
-- (void)showRatingAlert:(BOOL)displayRateLaterButton {
-  UIAlertView *alertView = nil;
-  if (displayRateLaterButton) {
-  	alertView = [[UIAlertView alloc] initWithTitle:self.alertTitle
-                                           message:self.alertMessage
-                                          delegate:self
-                                 cancelButtonTitle:self.alertCancelTitle
-                                 otherButtonTitles:self.alertRateTitle, self.alertRateLaterTitle, nil];
-  } else {
-  	alertView = [[UIAlertView alloc] initWithTitle:self.alertTitle
-                                           message:self.alertMessage
-                                          delegate:self
-                                 cancelButtonTitle:self.alertCancelTitle
-                                 otherButtonTitles:self.alertRateTitle, nil];
-  }
-
-	self.ratingAlert = alertView;
-    [alertView show];
+- (void)showRatingAlertOfType:(AppiraterAlertType)alertType withRateLaterButton:(BOOL)displayRateLaterButton {
+    switch (alertType) {
+        case AppiraterAlertTypeDefault:
+        {
+            UIAlertView *alertView = nil;
+            if (displayRateLaterButton) {
+                alertView = [[UIAlertView alloc] initWithTitle:self.alertTitle
+                                                       message:self.alertMessage
+                                                      delegate:self
+                                             cancelButtonTitle:self.alertCancelTitle
+                                             otherButtonTitles:self.alertRateTitle, self.alertRateLaterTitle, nil];
+            } else {
+                alertView = [[UIAlertView alloc] initWithTitle:self.alertTitle
+                                                       message:self.alertMessage
+                                                      delegate:self
+                                             cancelButtonTitle:self.alertCancelTitle
+                                             otherButtonTitles:self.alertRateTitle, nil];
+            }
+            
+            self.ratingAlert = alertView;
+            [alertView show];
+        }
+            break;
+        case AppiraterAlertTypeCustom:
+            //
+            break;
+    }
 
     id <AppiraterDelegate> delegate = _delegate;
     if (delegate && [delegate respondsToSelector:@selector(appiraterDidDisplayAlert:)]) {
